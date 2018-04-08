@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.pers.kl.dao.BlogMapper">
+  <resultMap id="BaseResultMap" type="site.pers.kl.bean.Blog">
+    <id column="blog_id" jdbcType="INTEGER" property="blogId" />
+    <result column="blog_article_title" jdbcType="VARCHAR" property="blogArticleTitle" />
+    <result column="blog_author" jdbcType="VARCHAR" property="blogAuthor" />
+    <result column="blog_type" jdbcType="INTEGER" property="blogType" />
+    <result column="blog_image" jdbcType="VARCHAR" property="blogImage" />
+    <result column="blog_content" jdbcType="VARCHAR" property="blogContent" />
+    <result column="blog_submit_date" jdbcType="TIMESTAMP" property="blogSubmitDate" />
+  </resultMap>
+  <!--带博客类型-->
+  <resultMap id="WithBlogTypeResultMap" type="site.pers.kl.bean.Blog">
+    <id column="blog_id" jdbcType="INTEGER" property="blogId" />
+    <result column="blog_article_title" jdbcType="VARCHAR" property="blogArticleTitle" />
+    <result column="blog_author" jdbcType="VARCHAR" property="blogAuthor" />
+    <result column="blog_type" jdbcType="INTEGER" property="blogType" />
+    <result column="blog_image" jdbcType="VARCHAR" property="blogImage" />
+    <result column="blog_content" jdbcType="VARCHAR" property="blogContent" />
+    <result column="blog_submit_date" jdbcType="TIMESTAMP" property="blogSubmitDate" />
+    <association property="blogTypeInfo" javaType="site.pers.kl.bean.BlogType">
+      <id column="blog_type_id" jdbcType="INTEGER" property="blogTypeId" />
+      <result column="blog_type_name" jdbcType="VARCHAR" property="blogTypeName" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    blog_id, blog_article_title, blog_author, blog_type, blog_image, blog_content, blog_submit_date
+  </sql>
+  <sql id="WithBlogType_Column_List" >
+    b.blog_id, b.blog_article_title, b.blog_author, b.blog_type, b.blog_image, b.blog_content, b.blog_submit_date,
+    t.blog_type_id, t.blog_type_name
+  </sql>
+  <!--带博客类型查询-->
+  <select id="selectByExampleWithBlogType" parameterType="site.pers.kl.bean.BlogExample" resultMap="WithBlogTypeResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithBlogType_Column_List" />
+    from manage_blog b
+    LEFT JOIN manage_blog_type t
+    ON b.blog_type = t.blog_type_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <!--主键查询带博客-->
+  <select id="selectByPrimaryKeyWithBlogType" parameterType="java.lang.Integer" resultMap="WithBlogTypeResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manage_blog
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByExample" parameterType="site.pers.kl.bean.BlogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manage_blog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manage_blog
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from manage_blog
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="site.pers.kl.bean.BlogExample">
+    delete from manage_blog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="site.pers.kl.bean.Blog">
+    insert into manage_blog (blog_id, blog_article_title, blog_author, 
+      blog_type, blog_image, blog_content, 
+      blog_submit_date)
+    values (#{blogId,jdbcType=INTEGER}, #{blogArticleTitle,jdbcType=VARCHAR}, #{blogAuthor,jdbcType=VARCHAR}, 
+      #{blogType,jdbcType=INTEGER}, #{blogImage,jdbcType=VARCHAR}, #{blogContent,jdbcType=VARCHAR}, 
+      #{blogSubmitDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="site.pers.kl.bean.Blog">
+    insert into manage_blog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="blogId != null">
+        blog_id,
+      </if>
+      <if test="blogArticleTitle != null">
+        blog_article_title,
+      </if>
+      <if test="blogAuthor != null">
+        blog_author,
+      </if>
+      <if test="blogType != null">
+        blog_type,
+      </if>
+      <if test="blogImage != null">
+        blog_image,
+      </if>
+      <if test="blogContent != null">
+        blog_content,
+      </if>
+      <if test="blogSubmitDate != null">
+        blog_submit_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="blogId != null">
+        #{blogId,jdbcType=INTEGER},
+      </if>
+      <if test="blogArticleTitle != null">
+        #{blogArticleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="blogAuthor != null">
+        #{blogAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="blogType != null">
+        #{blogType,jdbcType=INTEGER},
+      </if>
+      <if test="blogImage != null">
+        #{blogImage,jdbcType=VARCHAR},
+      </if>
+      <if test="blogContent != null">
+        #{blogContent,jdbcType=VARCHAR},
+      </if>
+      <if test="blogSubmitDate != null">
+        #{blogSubmitDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="site.pers.kl.bean.BlogExample" resultType="java.lang.Long">
+    select count(*) from manage_blog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update manage_blog
+    <set>
+      <if test="record.blogId != null">
+        blog_id = #{record.blogId,jdbcType=INTEGER},
+      </if>
+      <if test="record.blogArticleTitle != null">
+        blog_article_title = #{record.blogArticleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.blogAuthor != null">
+        blog_author = #{record.blogAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.blogType != null">
+        blog_type = #{record.blogType,jdbcType=INTEGER},
+      </if>
+      <if test="record.blogImage != null">
+        blog_image = #{record.blogImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.blogContent != null">
+        blog_content = #{record.blogContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.blogSubmitDate != null">
+        blog_submit_date = #{record.blogSubmitDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update manage_blog
+    set blog_id = #{record.blogId,jdbcType=INTEGER},
+      blog_article_title = #{record.blogArticleTitle,jdbcType=VARCHAR},
+      blog_author = #{record.blogAuthor,jdbcType=VARCHAR},
+      blog_type = #{record.blogType,jdbcType=INTEGER},
+      blog_image = #{record.blogImage,jdbcType=VARCHAR},
+      blog_content = #{record.blogContent,jdbcType=VARCHAR},
+      blog_submit_date = #{record.blogSubmitDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="site.pers.kl.bean.Blog">
+    update manage_blog
+    <set>
+      <if test="blogArticleTitle != null">
+        blog_article_title = #{blogArticleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="blogAuthor != null">
+        blog_author = #{blogAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="blogType != null">
+        blog_type = #{blogType,jdbcType=INTEGER},
+      </if>
+      <if test="blogImage != null">
+        blog_image = #{blogImage,jdbcType=VARCHAR},
+      </if>
+      <if test="blogContent != null">
+        blog_content = #{blogContent,jdbcType=VARCHAR},
+      </if>
+      <if test="blogSubmitDate != null">
+        blog_submit_date = #{blogSubmitDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="site.pers.kl.bean.Blog">
+    update manage_blog
+    set blog_article_title = #{blogArticleTitle,jdbcType=VARCHAR},
+      blog_author = #{blogAuthor,jdbcType=VARCHAR},
+      blog_type = #{blogType,jdbcType=INTEGER},
+      blog_image = #{blogImage,jdbcType=VARCHAR},
+      blog_content = #{blogContent,jdbcType=VARCHAR},
+      blog_submit_date = #{blogSubmitDate,jdbcType=TIMESTAMP}
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </update>
+</mapper>

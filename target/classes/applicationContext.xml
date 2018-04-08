@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- 扫描注解 -->
+	<context:component-scan base-package="site.pers.kl">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<!-- 多部分文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="104857600" />
+		<property name="maxUploadSizePerFile" value="102400"/>
+		<property name="maxInMemorySize" value="4096" />
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
+
+	<!-- 引入外部properties文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!-- 配置DataSource -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${jdbc.driverClass}"></property>
+		<property name="url" value="${jdbc.jdbcUrl}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<!-- <property name="initialPoolSize" value="5"></property>
+		<property name="maxPoolSize" value="10"></property> -->
+	</bean>
+	
+	<!-- 配置SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- mybatis底下所有的xml都放到项目根路径下mapper下 -->
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:mapper/*.xml</value>
+				<value>classpath*:mapper/**/*.xml</value>
+			</list>
+		</property>
+		<!-- 起别名 -->
+		<property name="typeAliasesPackage" value="site.pesr.kl.bean"></property>
+		<!-- 分页工具 -->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<value>
+							helperDialect=mysql
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- 扫描dao层接口 -->
+	<bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- dao层接口所在的包 -->
+        <property name="basePackage" value="site.pers.kl.dao,site.pers.kl.dao.*"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />  
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager"/> 
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+</beans>

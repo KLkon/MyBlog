@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 配置文件路径 -->
+    <properties resource="generatorConfig.properties"/>
+    <!--数据库驱动包路径 -->
+    <classPathEntry location="${drive.class.path}"/>
+
+    <context id="MySQLTables" targetRuntime="MyBatis3">
+        <!--关闭注释 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <!--数据库连接信息 -->
+        <jdbcConnection driverClass="${jdbc.driverClass}" connectionURL="${jdbc.jdbcUrl}" userId="${jdbc.user}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <!--生成的model 包路径 -->
+        <javaModelGenerator targetPackage="${model.package}" targetProject="${target.project}">
+            <property name="enableSubPackages" value="ture"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--生成xml mapper文件 路径 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="ture"/>
+        </sqlMapGenerator>
+
+        <!-- 生成的Dao接口 的包路径 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${dao.package}" targetProject="${target.project}">
+            <property name="enableSubPackages" value="ture"/>
+        </javaClientGenerator>
+
+        <!--对应数据库表名
+        <table tableName="manager_product_uav"  domainObjectName="machine." mapperName="machine.ProductUavMapper"></table>
+
+        <table tableName="manager_model_uav"  domainObjectName="machine." mapperName="machine.ModelUavMapper"></table>
+
+        <table tableName="manager_log"  domainObjectName="log." mapperName="log.LogMapper"></table>
+
+        <table tableName="manager_factor"  domainObjectName="factor." mapperName="factor.FactorMapper"></table>
+        <table tableName="manager_monigas_model"  domainObjectName="monigas." mapperName="monigas.GasModelMapper"></table>
+
+
+        <table tableName="manager_monigas_product"  domainObjectName="monigas." mapperName="monigas.GasProductMapper"></table>
+        <table tableName="manage_blog_type"  mapperName="BlogTypeMapper"></table>
+        <table tableName="manage_blog"  mapperName="BlogMapper"></table>
+        <table tableName="manage_blog_comment"  mapperName="BlogCommentMapper"></table>-->
+        <table tableName="manage_contact_person"  mapperName="ContactPersonMapper"></table>
+    </context>
+</generatorConfiguration>

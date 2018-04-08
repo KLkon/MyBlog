@@ -1,0 +1,141 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>我的博客</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="resource/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="resource/images/blog.jpg" rel="icon" />
+    <script type="text/javascript" src="resource/js/jquery.min.js"></script>
+    <script type="text/javascript" src="resource/js/common.js"></script>
+
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <div class="header_resize">
+            <div class="logo">
+                <h1 id="animate_logo">
+                    <a href="#"><img src="resource/images/logo.jpg" width="48" height="50" alt="logo" /></a>
+                    <a href="index.jsp">我的 <span>博客</span> <small>发表博客</small></a>
+                </h1>
+            </div>
+            <div class="menu_nav">
+                <ul>
+                    <li><a href="index.jsp">主页</a></li>
+                    <li><a href="support.html">支持</a></li>
+                    <li class="active"><a href="addArticle.html">博客</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                </ul>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+
+    <div class="hbg">&nbsp;</div>
+
+    <div class="content">
+        <div class="content_resize">
+            <div class="mainbar">
+                <input type="image" src="resource/images/backtop.gif" id="backtop">
+
+                <div class="article">
+                    <h2><span>发表文章</span></h2><div class="clr"></div>
+                    <p>发表博客</p>
+                    <!--------------------------------------------------------------------------------------------->
+                    <form action="/addBlog" method="post" enctype="multipart/form-data" id='submit'>
+                        <ol>
+                            <li>
+                                <label for="title">标题</label>
+                                <input id="title" name="blogArticleTitle" class="text" />
+                                <span id='title_error' style='color:red'></span>
+                            </li>
+                            <li>
+                                <label for="author">发布者</label>
+                                <input id="author" name="blogAuthor" class="text" style="width:100px;" />
+                                <span id='author_error' style='color:red'></span>
+                            </li>
+                            <li id="article_tag">
+                                <label for="selectType">分类</label>
+                                <select id="selectType" name="blogType">
+                                </select>
+                                <span id='tag_error' style='color:red'></span>
+                            </li>
+                            <li>
+                                <label for="img_upload" >上传图片(小于200kb)</label>
+                                <div class='img_upload_style'>上传图片</div>
+                                <input id="img_upload" type="file" id="blogImage" name="blogImageStream" accept="image/png, image/jpeg, image/gif, image/jpg"  style='width:78px;height:30px;position:relative;opacity: 0;' />
+                                <span id='img_name'></span>
+                            </li>
+                            <li>
+                                <label for="content">博客内容</label>
+                                <textarea id="content" name="blogContent" rows="8" cols="50" wrap="virtual"></textarea><span id='content_error' style='color:red'></span>
+                            </li>
+                            <li>
+                                <label for="captcha_img">验证码(60秒后过期)</label>
+                                <img id="captcha_img" src="/getCode"><a href ="javascript:void(0)" onclick="changeImg('#captcha_img')">换一张</a>
+                                <br>请输入验证码<br>
+                                <input type='text' name='authcode' id='authcode'><span id='authcode_error' style='color:red'></span>
+                            </li>
+                            <li>
+                                <input type="image" name="imageField" id="imageField" src="resource/images/submit.gif" class="send" />
+                                <div class="clr"></div>
+                            </li>
+                        </ol>
+                    </form>
+                </div>
+
+            </div>
+            <!-------------------------------------------------------------------------------------------->
+            <div class="sidebar">
+                <div class="searchform">
+                    <form id="formsearch" name="formsearch" method="post" action="/searchSomeThing"><!--此处后台编写-->
+                        <span id="select">
+                        <select name="searchSelect">
+                          <option value="blog">站内</option>
+                          <option value="baidu">百度</option>
+                        </select>
+                    </span>
+                        <span><input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="80" placeholder="关键字搜索" type="text" /></span>
+                        <input name="button_search" src="resource/images/search_btn.gif" class="button_search" type="image" />
+                    </form>
+                </div>
+                <div class="gadget">
+                    <!--天气预报-->
+                    <iframe width="310px" scrolling="no" height="25px" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&a=getcode&id=40&h=25&w=310"></iframe>
+                    <!--菜单栏-->
+                    <h2 class="star">菜单栏</h2>
+                    <div class="clr"></div>
+                    <ul class="sb_menu">
+                        <li><a href="https://poi.io/#/" target="_blank"></a></li>
+                        <li><a href="#"></a></li>
+                    </ul>
+                    <!--日期-->
+                    <iframe width="310px" height="174px" border=0 frameBorder=0  scrolling=no src="http://www.1t2t.com/1t/1.htm"></iframe>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer_resize">
+            <p class="lf">© Copyright <a href="#">我的空间</a>. Collect from <a href="https://github.com/KLkon" title="GitHub" target="_blank">我的空间</a></p>            <ul class="fmenu">
+            <li class="active"><a href="index.jsp">主页</a></li>
+            <li><a href="support.html">支持</a></li>
+            <li><a href="addArticle.html">博客</a></li>
+            <li><a href="contact.html">联系我</a></li>
+        </ul>
+            <div class="clr"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //获取所有博客类型
+    $(function () {
+        getBlogTypes("#selectType");
+    });
+</script>
+</body>
+</html>
